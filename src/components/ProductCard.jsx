@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const ProductCard = ({product}) => {
     return (
-        <div className="border w-80 shadow hover:shadow-xl">
+        <div className="border w-80 shadow-md hover:shadow-xl">
             <Link href={`/products/${product.id}`}>
               <Image src={product.pictureUrl} alt=""
                 width={320} height={240}
