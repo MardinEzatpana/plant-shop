@@ -1,8 +1,10 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import Page from "../src/components/Page";
 import { fetchJson } from "../src/lib/api";
 
 const SignIn = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState({ loading: false, error: false });
@@ -18,6 +20,7 @@ const SignIn = () => {
       });
       setStatus({ loading: false, error: false });
       console.log("sign-in:", response);
+      router.push('/');
     } catch (error) {
       setStatus({ loading: false, error: true });
     }
