@@ -1,26 +1,13 @@
-import {useEffect, useState} from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../assets/1331030.svg";
 import shCart from "../assets/297750.svg";
-import { fetchJson } from "../lib/api";
-const Navbar = () => {
-  const [user, setUser] = useState();
-  useEffect(() => {
-    (async () => {
-      try {
-        const user = await fetchJson('/api/user');
-        setUser(user);
-      } catch (err) {
-        // not signed in
-      }
-    })();
-  }, []);
+import { useSignOut, useUser } from "../hooks/user";
 
-  const handleSignOut = async () => {
-    await fetchJson('/api/logout');
-    setUser(undefined);
-  };
+const Navbar = () => {
+  const user = useUser();
+  const signOut = useSignOut();
+
   return (
     <nav className="flex justify-between h-10 px-3 py-1 shadow-lg my-3 bg-gray-100">
       <Link href="/">
@@ -33,7 +20,7 @@ const Navbar = () => {
             {user.name}
           </li>
           <li>
-            <button className="pr-10 pl-2 text-sm" onClick={handleSignOut}>SIGN OUT</button>
+            <button className="pr-10 pl-2 text-sm" onClick={signOut}>SIGN OUT</button>
           </li>
           </>
         ) : (

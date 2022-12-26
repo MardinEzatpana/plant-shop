@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import Page from "../src/components/Page";
 import { fetchJson } from "../src/lib/api";
 
@@ -7,22 +8,22 @@ const SignIn = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [status, setStatus] = useState({ loading: false, error: false });
+  const queryClient = useQueryClient()
+  const mutation = useMutation(() => fetchJson('/api/login', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  }))
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setStatus({ loading: true, error: false });
     try {
-      const response = await fetchJson('/api/login', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      setStatus({ loading: false, error: false });
-      console.log("sign-in:", response);
+      const user = await mutation.mutateAsync();
+      queryClient.setQueriesData('user', user);
+      console.log("signed in:", user);
       router.push('/');
     } catch (error) {
-      setStatus({ loading: false, error: true });
+      // mutation.isError will be true
     }
   };
 
@@ -53,10 +54,10 @@ const SignIn = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {status.error && (
+        {mutation.isError && (
           <div className="text-red-700">Invalid credentials</div>
         )}
-        {status.loading ? (
+        {mutation.isLoading ? (
           <p>loading...</p>
         ) : (
           <button
