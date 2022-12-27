@@ -1,5 +1,7 @@
 import Image from "next/image";
+import AddToCart from "../../src/components/AddToCart";
 import Page from "../../src/components/Page";
+import { useUser } from "../../src/hooks/user";
 import { ApiError } from "../../src/lib/api";
 import { getProduct, getProducts } from "../../src/lib/products";
 
@@ -29,6 +31,7 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 const Product = ({ product }) => {
+  const user = useUser();
   return (
     <Page title={product.title}>
       <div className="flex flex-col lg:flex-row">
@@ -44,6 +47,7 @@ const Product = ({ product }) => {
         <div className="flex-1 lg:ml-4">
           <p className="text-sm">{product.description}</p>
           <p className="text-lg font-bold mt-2">{product.price}</p>
+          {user && <AddToCart productId={product.id} />}
         </div>
       </div>
     </Page>

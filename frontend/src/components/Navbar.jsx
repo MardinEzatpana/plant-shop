@@ -22,6 +22,11 @@ const Navbar = () => {
           <li>
             <button className="pr-10 pl-2 text-sm" onClick={signOut}>SIGN OUT</button>
           </li>
+          <li>
+          <Link href="/cart">
+            <Image className="w-10 h-7 ml-2 pr-5" src={shCart} alt="shCart" />
+          </Link>
+        </li>
           </>
         ) : (
           <li>
@@ -30,11 +35,6 @@ const Navbar = () => {
             </Link>
           </li>
         )}
-        <li>
-          <Link href="/shop">
-            <Image className="w-10 h-7 ml-2 pr-5" src={shCart} alt="shCart" />
-          </Link>
-        </li>
       </ul>
     </nav>
   );
